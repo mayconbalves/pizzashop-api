@@ -4,21 +4,20 @@ import { authLinks } from "../../db/schema";
 import { createId } from "@paralleldrive/cuid2";
 import { env } from "../../env";
 
-export const sendAuthLink = new Elysia()
-  .post("/authenticate", async ({ body, set }) => {
+export const sendAuthLink = new Elysia().post(
+  "/authenticate",
+  async ({ body }) => {
     const { email } = body;
 
+    const userFromEmail = await db.query.users.findFirst({
+      where(fields, { eq }) {
+        return eq(fields.email, email);
+      },
+    });
 
-    const userFromEmail = await db
-      .query.users.findFirst({
-        where(fields, { eq }) {
-          return eq(fields.email, email);
-        },
-      });
-
-      if (!userFromEmail) {
-       throw new Error("User not found");
-      }
+    if (!userFromEmail) {
+      throw new Error("User not found");
+    }
 
     const authLinkCode = createId();
 
@@ -33,8 +32,10 @@ export const sendAuthLink = new Elysia()
     authLink.searchParams.set("redirect", env.AUTH_REDIRECT_URL);
 
     console.log(authLink.toString());
-  }, {
+  },
+  {
     body: t.Object({
       email: t.String({ format: "email" }),
-    })
-  })
+    }),
+  },
+);
