@@ -10,7 +10,7 @@ export const authenticateFromLink = new Elysia()
   .get(
     "/auth-links/authenticate",
 
-    async ({ query, set, jwt: { sign} }) => {
+    async ({ query, set, signUser }) => {
     const { code, redirect } = query;
 
     const authLinkFromCode = await db.query.authLinks.findFirst({
@@ -38,19 +38,10 @@ export const authenticateFromLink = new Elysia()
       },
     });
 
-    const jwt = await sign({
+    await signUser({
       sub: authLinkFromCode.userId,
       restaurantId: managedRestaurant?.id,
     });
-
-    set.cookie = {
-      auth: {
-        value: jwt,
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: "/",
-      },
-    };
 
     await db.delete(authLinks).where(eq(authLinks.code, code));
 
