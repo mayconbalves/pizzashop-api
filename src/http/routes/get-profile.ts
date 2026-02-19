@@ -8,7 +8,7 @@ export const getProfile = new Elysia()
     const { userId } = await getCurrentUser();
     const user = await db.query.users.findFirst({
       where(fields, { eq }) {
-        return eq(fields.id, userId)
+        return eq(fields.id, userId);
       },
     });
 

@@ -5,12 +5,10 @@ import { auth } from "../auth";
 import { authLinks } from "../../db/schema/auth-links";
 import { eq } from "drizzle-orm";
 
-export const authenticateFromLink = new Elysia()
-  .use(auth)
-  .get(
-    "/auth-links/authenticate",
+export const authenticateFromLink = new Elysia().use(auth).get(
+  "/auth-links/authenticate",
 
-    async ({ query, set, signUser }) => {
+  async ({ query, set, signUser }) => {
     const { code, redirect } = query;
 
     const authLinkFromCode = await db.query.authLinks.findFirst({
@@ -52,5 +50,5 @@ export const authenticateFromLink = new Elysia()
       code: t.String(),
       redirect: t.String(),
     }),
-  }
+  },
 );
