@@ -4,10 +4,13 @@ import { sendAuthLink } from "./routes/send-auth-link";
 import { authenticateFromLink } from "./routes/authenticate-from-link";
 import { signOut } from "./routes/sign-out";
 
+import { getProfile } from "./routes/get-profile";
+
 const app = new Elysia()
   .use(registerRestaurant)
   .use(sendAuthLink)
   .use(authenticateFromLink)
+  .use(getProfile)
   .use(signOut);
 
 app.listen(3333, () => {
