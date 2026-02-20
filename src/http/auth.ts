@@ -3,6 +3,7 @@ import jwt from "@elysiajs/jwt";
 import { env } from "../env";
 import cookie from "@elysiajs/cookie";
 import type { Static } from "@sinclair/typebox";
+import { Unauthorized } from "./errors/unauthorized-error";
 
 const jwtPayload = t.Object({
   sub: t.String(),
@@ -10,6 +11,17 @@ const jwtPayload = t.Object({
 });
 
 export const auth = new Elysia()
+  .error({
+    UNAUTHORIZED: Unauthorized,
+  })
+  .onError(({ error, code, set }) => {
+    switch (code) {
+      case "UNAUTHORIZED": {
+        set.status = 401;
+        return { code, message: error.message };
+      }
+    }
+  })
   .use(
     jwt({
       secret: env.JWT_SECRET_KEY,
@@ -36,7 +48,7 @@ export const auth = new Elysia()
         const payload = await jwt.verify(cookie.auth);
 
         if (!payload) {
-          throw new Error("Invalid token");
+          throw new Unauthorized();
         }
 
         return {
