@@ -43,6 +43,13 @@
       "when": 1771781822265,
       "tag": "0005_square_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1771871529185,
+      "tag": "0006_moaning_wildside",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,12 @@
 import { faker } from "@faker-js/faker";
-import { users, restaurants } from "./schema";
+import {
+  users,
+  restaurants,
+  orderItems,
+  orders,
+  products,
+  authLinks,
+} from "./schema";
 import { db } from "./connection";
 import chalk from "chalk";
 
@@ -9,6 +16,10 @@ import chalk from "chalk";
 
 await db.delete(users);
 await db.delete(restaurants);
+await db.delete(orderItems);
+await db.delete(orders);
+await db.delete(products);
+await db.delete(authLinks);
 
 console.log(chalk.yellow("Database reset"));
 
